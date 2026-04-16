@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}History{% endblock %}
+
+{% block pageTitle %}
+    <h4>History</h4>
+{% endblock %}
+
+
+{% block formInfo %}
+
+<div id="historyConfig" data-history-password="{{ history_password|e }}" hidden></div>
+
+<div id="warningAdd">
+</div>
+
+<div class="container text-center" id="passwordDiv">
+    <h5>Please enter password:</h5>
+
+    <!-- <div class="d-flex justify-content-center align-items-center" style="gap: 8px;">
+        <input type="password" class="text-center" id="userGuess" style="height: 32px; width: 200px;">
+        <button class="btn btn-dark" id="pSubmit">Submit</button>
+    </div> -->
+    <div class="d-flex justify-content-center align-items-center" style="gap: 8px;">
+        <div style="position: relative;">
+            <input type="password" class="text-center" id="userGuess" style="height: 32px; width: 200px; padding-right: 30px;">
+            <button type="button" id="togglePassword" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); border: none; background: none; cursor: pointer;">
+                <i class="fa-solid fa-eye" id="eyeIcon"></i>
+            </button>
+        </div>
+        <button class="btn btn-dark" id="pSubmit">Submit</button>
+    </div>
+
+</div>
+
+
+<div class="container" id="historyDiv">
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Equipment</th>
+                <th>Checked Out Date</th>
+                <th>Checked Out Time</th>
+                <th>Returned Date</th>
+                <th>Returned Time</th>
+            </tr>
+        </thead>
+        <tbody id="contents">
+            {% for row in returned %}
+            <tr>
+                <td>{{ row[0] if row[0] else '' }}</td>
+                <td>{{ row[1] if row[1] else '' }}</td>
+                <td>
+                    {{ row[4] if row[4] else '' }}
+                </td>
+                <td>{{ row[5] if row[5] else '' }}</td>
+                <td>{{ row[6].strftime('%I:%M %p') if row[6] else '' }}</td>
+                <td>{{ row[2] if row[2] else '' }}</td>
+                <td>{{ row[3].strftime('%I:%M %p') if row[3] else '' }}</td>                  
+                
+            </tr>
+            {% endfor %}
+
+
+        </tbody>
+    </table>
+    
+</div>
+{% endblock %}

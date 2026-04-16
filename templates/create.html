@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block pageTitle %}
+    <h4>Home</h4>
+{% endblock %}
+
+{% block formInfo %}
+
+    
+    {% if error %}
+    <div id="errorDiv" class="warning">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <div class="container">
+        <form method="POST" action="{{url_for('create')}}">
+
+            {{ form.csrf_token }}
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-secondary">Submit Information</button>
+            </div>
+
+            <!-- Student ID Field (full width as before, aligned left, darker label) -->
+            <div class="form-row">
+                <div class="col-12">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text dark-gray">Student ID</span>
+                        </div>
+                        <input type="text" class="form-control {{ 'is-invalid' if form.studentId.errors else '' }}" 
+                            placeholder="123456789010" id="studentIDinp" name="studentId" value="{{ form.studentId.data if form.studentId.data else '' }}" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Equipment ID Fields (spaced to fit in one line) -->
+            <div class="form-row">
+                {% for i in range(1, 6) %}
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">ID</span>
+                        </div>
+                        <input type="text" class="form-control {{ 'is-invalid' if form['equipmentId' ~ i].errors else '' }}" 
+                            placeholder="123456" id="equipmentID{{i}}inp" name="equipmentId{{i}}" value="{{ form['equipmentId' ~ i].data if form['equipmentId' ~ i].data else '' }}"{% if i == 1 %} required{% endif %}>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </form>
+        
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Equipment</th>
+                    <th>Checked Out Date</th>
+                    <th>Checked Out Time</th>
+                    <th>Returned?</th>
+                </tr>
+            </thead>
+            <tbody id="contents">
+                {% for student in checked_out %}
+                <tr>
+                    <td class="firstName">{{ student[0] if student[0] else '' }}</td>
+                    <td class="lastName">{{ student[1] if student[1] else '' }}</td>
+                    <td class="equipment">
+                        {{ student[2] if student[2] else '' }}
+                    </td>
+                    <td class="date">{{ student[3] if student[3] else '' }}</td>
+                    <td class="time">{{ student[4].strftime('%I:%M %p') if student[4] else '' }}</td>
+                    <td>
+                        <form method="POST" action="{{url_for('history')}}">
+                            <!--Hidden fields to pass student and equipment info-->
+
+                            <input type="hidden" name="hStudentId" value="{{ student[5] }}">
+                            <input type="hidden" name="hEquipmentId" value="{{ student[6] }}">
+                            <input type="hidden" name="checkedOutDate" value="{{ student[3] }}">
+                            <input type="hidden" name="checkedOutTime" value="{{ student[4] }}">
+                            <input type="hidden" name="firstName" value="{{ student[0] }}">
+                            <input type="hidden" name="lastName" value="{{ student[1] }}">
+                            <input type="hidden" name="equipment" value="{{ student[2] }}">
+                            
+                            <!-- <input type="checkbox" class="form-check-input" onchange="removeRow(this); this.form.submit()"> -->
+                            <!-- <button type="submit" class="btn btn-dark" onclick="removeRow(this);">Returned?</button> -->
+                            
+                            <input type="checkbox" class="returnCheckbox" onclick="removeRow(this)">
+                        </form>
+                    </td>
+                      
+                </tr>
+                {% endfor %}
+
+
+            </tbody>
+        </table>
+        
+    </div>
+
+    
+{% endblock %}

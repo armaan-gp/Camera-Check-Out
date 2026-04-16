@@ -1,0 +1,14 @@
+# Secrets
+.env
+cameracheckout-b1ce1b6816c0.json
+
+# Python caches/build artifacts
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+
+# OS files
+.DS_Store

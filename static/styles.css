@@ -1,0 +1,43 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "San Francisco", Helvetica, Arial, sans-serif;
+}
+
+@keyframes disappear {
+    0% {
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+
+.warning {
+    position: absolute;
+    top: 15.3rem;
+    left: 0;
+    width: 100%;
+    min-width: 200px;
+    margin: 0;
+    text-align: center;
+    background-color: #fec1c1;
+    height: 2rem;
+    line-height: 2rem;
+    z-index: 1000;
+    animation-name: disappear;
+    animation-duration: 5s;
+    animation-fill-mode: forwards;
+    animation-play-state: running; /* Add this */
+}
+
+/* Pause animation on hover */
+.warning:hover {
+    animation-play-state: paused;
+}
+
+.icon-hover.text-primary:hover {
+    color: #2e7dd1  !important; /*Slightly darker than Bootstrap's .text-primary (#007bff) */
+}
