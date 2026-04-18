@@ -8,32 +8,23 @@
 
 
 {% block formInfo %}
-
-<div id="historyConfig" data-history-password="{{ history_password|e }}" hidden></div>
-
-<div id="warningAdd">
-</div>
-
+{% if not authenticated %}
 <div class="container text-center" id="passwordDiv">
     <h5>Please enter password:</h5>
-
-    <!-- <div class="d-flex justify-content-center align-items-center" style="gap: 8px;">
-        <input type="password" class="text-center" id="userGuess" style="height: 32px; width: 200px;">
-        <button class="btn btn-dark" id="pSubmit">Submit</button>
-    </div> -->
-    <div class="d-flex justify-content-center align-items-center" style="gap: 8px;">
+    <form method="POST" action="{{ url_for('login') }}" class="d-flex justify-content-center align-items-center" style="gap: 8px;">
+        {{ login_form.hidden_tag() }}
         <div style="position: relative;">
-            <input type="password" class="text-center" id="userGuess" style="height: 32px; width: 200px; padding-right: 30px;">
+            <input type="password" class="text-center" id="userGuess" name="password" style="height: 32px; width: 200px; padding-right: 30px;" required>
             <button type="button" id="togglePassword" style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); border: none; background: none; cursor: pointer;">
                 <i class="fa-solid fa-eye" id="eyeIcon"></i>
             </button>
         </div>
-        <button class="btn btn-dark" id="pSubmit">Submit</button>
-    </div>
-
+        <button class="btn btn-dark" id="pSubmit" type="submit">Submit</button>
+    </form>
 </div>
+{% endif %}
 
-
+{% if authenticated %}
 <div class="container" id="historyDiv">
 
     <table class="table table-hover">
@@ -54,12 +45,12 @@
                 <td>{{ row[0] if row[0] else '' }}</td>
                 <td>{{ row[1] if row[1] else '' }}</td>
                 <td>
-                    {{ row[4] if row[4] else '' }}
+                    {{ row[2] if row[2] else '' }}
                 </td>
+                <td>{{ row[3] if row[3] else '' }}</td>
+                <td>{{ row[4].strftime('%I:%M %p') if row[4] else '' }}</td>
                 <td>{{ row[5] if row[5] else '' }}</td>
                 <td>{{ row[6].strftime('%I:%M %p') if row[6] else '' }}</td>
-                <td>{{ row[2] if row[2] else '' }}</td>
-                <td>{{ row[3].strftime('%I:%M %p') if row[3] else '' }}</td>                  
                 
             </tr>
             {% endfor %}
@@ -69,4 +60,5 @@
     </table>
     
 </div>
+{% endif %}
 {% endblock %}

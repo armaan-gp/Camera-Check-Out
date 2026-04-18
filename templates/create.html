@@ -9,20 +9,17 @@
 {% block formInfo %}
 
     
-    {% if error %}
-    <div id="errorDiv" class="warning">
-        {{ error }}
-    </div>
-    {% endif %}
-
     <div class="container">
         <form method="POST" action="{{url_for('create')}}">
 
-            {{ form.csrf_token }}
+            {{ form.hidden_tag() }}
 
             <div class="form-group">
                 <button type="submit" class="btn btn-secondary">Submit Information</button>
             </div>
+            {% if not is_authenticated %}
+            <p class="text-muted">Sign in on the History page before making checkout changes.</p>
+            {% endif %}
 
             <!-- Student ID Field (full width as before, aligned left, darker label) -->
             <div class="form-row">
@@ -75,16 +72,11 @@
                     <td class="date">{{ student[3] if student[3] else '' }}</td>
                     <td class="time">{{ student[4].strftime('%I:%M %p') if student[4] else '' }}</td>
                     <td>
-                        <form method="POST" action="{{url_for('history')}}">
+                        <form method="POST" action="{{url_for('return_item')}}">
                             <!--Hidden fields to pass student and equipment info-->
-
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                             <input type="hidden" name="hStudentId" value="{{ student[5] }}">
                             <input type="hidden" name="hEquipmentId" value="{{ student[6] }}">
-                            <input type="hidden" name="checkedOutDate" value="{{ student[3] }}">
-                            <input type="hidden" name="checkedOutTime" value="{{ student[4] }}">
-                            <input type="hidden" name="firstName" value="{{ student[0] }}">
-                            <input type="hidden" name="lastName" value="{{ student[1] }}">
-                            <input type="hidden" name="equipment" value="{{ student[2] }}">
                             
                             <!-- <input type="checkbox" class="form-check-input" onchange="removeRow(this); this.form.submit()"> -->
                             <!-- <button type="submit" class="btn btn-dark" onclick="removeRow(this);">Returned?</button> -->
